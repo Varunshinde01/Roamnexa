@@ -15,8 +15,8 @@ const tabs = [
 ];
 
 const Field = ({ label, children }) => (
-  <div className="p-4 hover:bg-blue-50 transition-colors cursor-pointer">
-    <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">{label}</div>
+  <div className="p-4 hover:bg-blue-50/50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
+    <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{label}</div>
     {children}
   </div>
 );
@@ -428,7 +428,7 @@ const BookingForm = ({ onBookingSuccess }) => {
       )}
 
       {/* Tab Bar - Fluid Glassmorphism */}
-      <div className="bg-white/80 backdrop-blur-xl border border-white/40 rounded-3xl shadow-[0_12px_40px_rgba(15,23,42,0.06)] mb-5 mx-auto max-w-5xl overflow-hidden hidden md:block">
+      <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-slate-800/80 rounded-3xl shadow-[0_12px_40px_rgba(15,23,42,0.06)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.3)] mb-5 mx-auto max-w-5xl overflow-hidden hidden md:block transition-all duration-300">
         <div className="flex justify-between items-center px-6 py-4">
           {tabs.map(tab => {
             const Icon = tab.icon;
@@ -440,14 +440,14 @@ const BookingForm = ({ onBookingSuccess }) => {
                 type="button"
                 className={`flex flex-col items-center gap-1.5 group relative px-4 py-2.5 rounded-2xl transition-all duration-300 min-w-[85px] cursor-pointer ${
                   isActive 
-                    ? 'bg-blue-600/10 text-blue-600 font-bold scale-105' 
-                    : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/60'
+                    ? 'bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold scale-105' 
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/60 dark:hover:bg-slate-800/40'
                 }`}
               >
                 <div className={`p-1.5 rounded-full transition-all duration-300 ${isActive ? 'bg-blue-600/20' : 'group-hover:scale-110'}`}>
                   <Icon size={20} className={tab.highlight ? 'text-purple-600' : ''} />
                 </div>
-                <span className={`text-xs tracking-wide ${tab.highlight ? 'text-purple-700 font-bold' : 'font-medium'}`}>{tab.label}</span>
+                <span className={`text-xs tracking-wide ${tab.highlight ? 'text-purple-700 font-bold dark:text-purple-400' : 'font-medium'}`}>{tab.label}</span>
                 {isActive && (
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 bg-blue-600 rounded-t-full shadow-lg shadow-blue-500/50" />
                 )}
@@ -470,7 +470,7 @@ const BookingForm = ({ onBookingSuccess }) => {
               className={`flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm whitespace-nowrap transition-all duration-200 border cursor-pointer ${
                 isActive 
                   ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20' 
-                  : 'bg-white text-slate-600 border-slate-100 hover:border-slate-200'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-700 hover:border-slate-200'
               }`}
             >
               <Icon size={15} />
@@ -481,13 +481,13 @@ const BookingForm = ({ onBookingSuccess }) => {
       </div>
 
       {/* Main Card - Extremely Modern & Fluidic */}
-      <div className="bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_25px_60px_rgba(8,112,184,0.08)] p-6 md:p-8 pt-8 pb-16 border border-white/60 relative animate-float-slow">
+      <div className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_25px_60px_rgba(8,112,184,0.08)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.4)] p-6 md:p-8 pt-8 pb-16 border border-white/60 dark:border-slate-800/80 relative animate-float-slow transition-all duration-300">
 
         {/* FLIGHTS */}
         {activeTab === 'flight' && (
           <>
             {/* iOS style Segmented Control for Trip Type */}
-            <div className="flex bg-slate-100/70 p-1 rounded-2xl w-fit mb-6 border border-slate-200/30">
+            <div className="flex bg-slate-100/70 dark:bg-slate-800/50 p-1 rounded-2xl w-fit mb-6 border border-slate-200/30 dark:border-slate-700/30">
               {['oneway', 'roundtrip', 'multicity'].map(t => {
                 const isActive = tripType === t;
                 return (
@@ -497,8 +497,8 @@ const BookingForm = ({ onBookingSuccess }) => {
                     onClick={() => setTripType(t)}
                     className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 uppercase tracking-wider cursor-pointer whitespace-nowrap ${
                       isActive 
-                        ? 'bg-white text-blue-600 shadow-sm font-extrabold scale-102' 
-                        : 'text-slate-500 hover:text-slate-800'
+                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm font-extrabold scale-102' 
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                     }`}
                   >
                     {t === 'oneway' ? 'One Way' : t === 'roundtrip' ? 'Round Trip' : 'Multi City'}
@@ -514,7 +514,7 @@ const BookingForm = ({ onBookingSuccess }) => {
               />
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-5 border border-slate-100 rounded-3xl overflow-hidden bg-white shadow-[0_4px_24px_rgba(15,23,42,0.02)] divide-y md:divide-y-0 md:divide-x divide-slate-100 relative z-[110]">
+            <div className="grid grid-cols-1 md:grid-cols-5 border border-slate-100 dark:border-slate-800/40 rounded-3xl overflow-hidden bg-white dark:bg-slate-900 shadow-[0_4px_24px_rgba(15,23,42,0.02)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.2)] divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800/50 relative z-[110]">
               
               {/* FROM Input with Dropdown Autocomplete */}
               <div className="relative">
