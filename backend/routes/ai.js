@@ -137,12 +137,20 @@ router.post('/chat', async (req, res) => {
   // If live Gemini client is configured
   if (model) {
     try {
-      // Format history for Google Gemini API if provided
+      // Format history for Google Gemini API, ensuring the first message is always from 'user'
+      let formattedHistory = [];
+      if (history && history.length > 0) {
+        const firstUserIdx = history.findIndex(h => h.role === 'user');
+        if (firstUserIdx !== -1) {
+          formattedHistory = history.slice(firstUserIdx).map(h => ({
+            role: h.role === 'user' ? 'user' : 'model',
+            parts: [{ text: h.text }],
+          }));
+        }
+      }
+
       const chat = model.startChat({
-        history: history ? history.map(h => ({
-          role: h.role === 'user' ? 'user' : 'model',
-          parts: [{ text: h.text }],
-        })) : [],
+        history: formattedHistory,
       });
 
       const result = await chat.sendMessage(message);
