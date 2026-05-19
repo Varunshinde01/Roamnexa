@@ -277,11 +277,49 @@ const ResultsModal = ({ results, type, onClose, onBook }) => {
   );
 };
 
+const INDIAN_AIRPORTS = [
+  { city: 'Delhi', code: 'DEL', name: 'Indira Gandhi International Airport', type: 'International' },
+  { city: 'Mumbai', code: 'BOM', name: 'Chhatrapati Shivaji Maharaj International Airport', type: 'International' },
+  { city: 'Bangalore', code: 'BLR', name: 'Kempegowda International Airport', type: 'International' },
+  { city: 'Hyderabad', code: 'HYD', name: 'Rajiv Gandhi International Airport', type: 'International' },
+  { city: 'Chennai', code: 'MAA', name: 'Chennai International Airport', type: 'International' },
+  { city: 'Kolkata', code: 'CCU', name: 'Netaji Subhash Chandra Bose International Airport', type: 'International' },
+  { city: 'Kochi', code: 'COK', name: 'Cochin International Airport', type: 'International' },
+  { city: 'Ahmedabad', code: 'AMD', name: 'Sardar Vallabhbhai Patel International Airport', type: 'International' },
+  { city: 'Pune', code: 'PNQ', name: 'Pune Airport', type: 'Domestic/International' },
+  { city: 'Goa', code: 'GOI', name: 'Dabolim Airport', type: 'International' },
+  { city: 'Goa (Mopa)', code: 'GOX', name: 'Manohar International Airport', type: 'International' },
+  { city: 'Jaipur', code: 'JAI', name: 'Jaipur International Airport', type: 'International' },
+  { city: 'Lucknow', code: 'LKO', name: 'Chaudhary Charan Singh International Airport', type: 'International' },
+  { city: 'Amritsar', code: 'ATQ', name: 'Sri Guru Ram Dass Jee International Airport', type: 'International' },
+  { city: 'Guwahati', code: 'GAU', name: 'Lokpriya Gopinath Bordoloi International Airport', type: 'International' },
+  { city: 'Thiruvananthapuram', code: 'TRV', name: 'Trivandrum International Airport', type: 'International' },
+  { city: 'Srinagar', code: 'SXR', name: 'Sheikh ul-Alam International Airport', type: 'International' },
+  { city: 'Bhubaneswar', code: 'BBI', name: 'Biju Patnaik International Airport', type: 'International' },
+  { city: 'Bagdogra', code: 'IXB', name: 'Bagdogra Airport', type: 'Domestic' },
+  { city: 'Nagpur', code: 'NAG', name: 'Dr. Babasaheb Ambedkar International Airport', type: 'International' },
+  { city: 'Patna', code: 'PAT', name: 'Jay Prakash Narayan Airport', type: 'Domestic' },
+  { city: 'Chandigarh', code: 'IXC', name: 'Shaheed Bhagat Singh International Airport', type: 'International' },
+  { city: 'Coimbatore', code: 'CJB', name: 'Coimbatore International Airport', type: 'International' },
+  { city: 'Varanasi', code: 'VNS', name: 'Lal Bahadur Shastri International Airport', type: 'International' },
+  { city: 'Visakhapatnam', code: 'VTZ', name: 'Visakhapatnam Airport', type: 'International' },
+  { city: 'Indore', code: 'IDR', name: 'Devi Ahilyabai Holkar Airport', type: 'International' },
+  { city: 'Ranchi', code: 'IXR', name: 'Birsa Munda Airport', type: 'Domestic' },
+  { city: 'Surat', code: 'STV', name: 'Surat International Airport', type: 'International' },
+  { city: 'Dehradun', code: 'DED', name: 'Jolly Grant Airport', type: 'Domestic' },
+  { city: 'Udaipur', code: 'UDR', name: 'Maharana Pratap Airport', type: 'Domestic' },
+  { city: 'Jammu', code: 'IXJ', name: 'Jammu Airport', type: 'Domestic' },
+  { city: 'Raipur', code: 'RPR', name: 'Swami Vivekananda Airport', type: 'Domestic' },
+  { city: 'Jodhpur', code: 'JDH', name: 'Jodhpur Airport', type: 'Domestic' }
+];
+
 const BookingForm = ({ onBookingSuccess }) => {
   const [activeTab, setActiveTab] = useState('flight');
   const [tripType, setTripType] = useState('oneway');
   const [from, setFrom] = useState('Delhi (DEL)');
   const [to, setTo] = useState('Mumbai (BOM)');
+  const [showFromDropdown, setShowFromDropdown] = useState(false);
+  const [showToDropdown, setShowToDropdown] = useState(false);
   const [date, setDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [passengers, setPassengers] = useState('1 Adult');
@@ -468,42 +506,70 @@ const BookingForm = ({ onBookingSuccess }) => {
                 );
               })}
             </div>
-            {/* Dedicated Quick Cities Presets Selector */}
-            <div className="mb-6 flex flex-wrap items-center gap-2 animate-fade-in">
-              <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider bg-slate-50 px-2 py-1 rounded-md shrink-0 border border-slate-100/50">📍 Quick Select Route:</span>
-              {[
-                { label: "Delhi ⇄ Mumbai", from: "Delhi (DEL)", to: "Mumbai (BOM)" },
-                { label: "Bangalore ⇄ Delhi", from: "Bangalore (BLR)", to: "Delhi (DEL)" },
-                { label: "Mumbai ⇄ Goa", from: "Mumbai (BOM)", to: "Goa (GOI)" },
-                { label: "Delhi ⇄ Dubai", from: "Delhi (DEL)", to: "Dubai (DXB)" }
-              ].map((p, idx) => {
-                const isMatching = (from === p.from && to === p.to) || (from === p.to && to === p.from);
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      if (from === p.from && to === p.to) {
-                        setFrom(p.to); setTo(p.from);
-                      } else {
-                        setFrom(p.from); setTo(p.to);
-                      }
-                    }}
-                    className={`text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-200 border cursor-pointer hover-float-button ${
-                      isMatching
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
-                        : 'bg-white text-slate-500 border-slate-150 hover:border-slate-300 hover:text-slate-700 shadow-sm'
-                    }`}
-                  >
-                    {p.label}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-5 border border-slate-100 rounded-3xl overflow-hidden bg-white shadow-[0_4px_24px_rgba(15,23,42,0.02)] divide-y md:divide-y-0 md:divide-x divide-slate-100">
-              <Field label="FROM">
-                <input value={from} onChange={e => setFrom(e.target.value)} className="text-xl font-extrabold text-slate-800 w-full outline-none bg-transparent placeholder-slate-400" />
-              </Field>
+            {/* Click-outside backdrop overlay */}
+            {(showFromDropdown || showToDropdown) && (
+              <div 
+                className="fixed inset-0 z-[100] cursor-default" 
+                onClick={() => { setShowFromDropdown(false); setShowToDropdown(false); }}
+              />
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-5 border border-slate-100 rounded-3xl overflow-hidden bg-white shadow-[0_4px_24px_rgba(15,23,42,0.02)] divide-y md:divide-y-0 md:divide-x divide-slate-100 relative z-[110]">
+              
+              {/* FROM Input with Dropdown Autocomplete */}
+              <div className="relative">
+                <Field label="FROM">
+                  <input 
+                    value={from} 
+                    onFocus={() => { setShowFromDropdown(true); setShowToDropdown(false); }}
+                    onChange={e => { setFrom(e.target.value); setShowFromDropdown(true); }}
+                    className="text-xl font-extrabold text-slate-800 w-full outline-none bg-transparent placeholder-slate-400 cursor-text" 
+                    placeholder="Search Airport..."
+                  />
+                </Field>
+                {showFromDropdown && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-150 rounded-2xl shadow-2xl z-[150] max-h-64 overflow-y-auto divide-y divide-slate-50 animate-fade-in">
+                    {INDIAN_AIRPORTS.filter(item => 
+                      item.city.toLowerCase().includes(from.toLowerCase()) || 
+                      item.code.toLowerCase().includes(from.toLowerCase()) ||
+                      item.name.toLowerCase().includes(from.toLowerCase())
+                    ).map(item => (
+                      <button
+                        key={item.code}
+                        type="button"
+                        onClick={() => {
+                          setFrom(`${item.city} (${item.code})`);
+                          setShowFromDropdown(false);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between cursor-pointer"
+                      >
+                        <div className="pr-2">
+                          <div className="font-extrabold text-sm text-slate-800">{item.city} ({item.code})</div>
+                          <div className="text-[10px] text-slate-400 font-bold mt-0.5 truncate max-w-[180px] md:max-w-[200px]">{item.name}</div>
+                        </div>
+                        <span className={`text-[8px] px-2 py-0.5 rounded font-black uppercase tracking-wider border shrink-0 ${
+                          item.type === 'International'
+                            ? 'bg-purple-50 text-purple-600 border-purple-200/50'
+                            : item.type === 'Domestic/International'
+                            ? 'bg-blue-50 text-blue-600 border-blue-200/50'
+                            : 'bg-emerald-50 text-emerald-600 border-emerald-200/50'
+                        }`}>
+                          {item.type}
+                        </span>
+                      </button>
+                    ))}
+                    {INDIAN_AIRPORTS.filter(item => 
+                      item.city.toLowerCase().includes(from.toLowerCase()) || 
+                      item.code.toLowerCase().includes(from.toLowerCase()) ||
+                      item.name.toLowerCase().includes(from.toLowerCase())
+                    ).length === 0 && (
+                      <div className="p-4 text-center text-xs text-slate-400 font-bold">No airports found</div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* TO Input with Swap Button and Dropdown Autocomplete */}
               <div className="relative">
                 <button 
                   onClick={swap} 
@@ -515,9 +581,57 @@ const BookingForm = ({ onBookingSuccess }) => {
                 >
                   <ArrowLeftRight size={15} className="text-blue-600 transition-transform duration-300 rotate-90 md:rotate-0" />
                 </button>
+                
                 <Field label="TO">
-                  <input value={to} onChange={e => setTo(e.target.value)} className="text-xl font-extrabold text-slate-800 w-full outline-none bg-transparent placeholder-slate-400" />
+                  <input 
+                    value={to} 
+                    onFocus={() => { setShowToDropdown(true); setShowFromDropdown(false); }}
+                    onChange={e => { setTo(e.target.value); setShowToDropdown(true); }}
+                    className="text-xl font-extrabold text-slate-800 w-full outline-none bg-transparent placeholder-slate-400 cursor-text" 
+                    placeholder="Search Airport..."
+                  />
                 </Field>
+                
+                {showToDropdown && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-150 rounded-2xl shadow-2xl z-[150] max-h-64 overflow-y-auto divide-y divide-slate-50 animate-fade-in">
+                    {INDIAN_AIRPORTS.filter(item => 
+                      item.city.toLowerCase().includes(to.toLowerCase()) || 
+                      item.code.toLowerCase().includes(to.toLowerCase()) ||
+                      item.name.toLowerCase().includes(to.toLowerCase())
+                    ).map(item => (
+                      <button
+                        key={item.code}
+                        type="button"
+                        onClick={() => {
+                          setTo(`${item.city} (${item.code})`);
+                          setShowToDropdown(false);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between cursor-pointer"
+                      >
+                        <div className="pr-2">
+                          <div className="font-extrabold text-sm text-slate-800">{item.city} ({item.code})</div>
+                          <div className="text-[10px] text-slate-400 font-bold mt-0.5 truncate max-w-[180px] md:max-w-[200px]">{item.name}</div>
+                        </div>
+                        <span className={`text-[8px] px-2 py-0.5 rounded font-black uppercase tracking-wider border shrink-0 ${
+                          item.type === 'International'
+                            ? 'bg-purple-50 text-purple-600 border-purple-200/50'
+                            : item.type === 'Domestic/International'
+                            ? 'bg-blue-50 text-blue-600 border-blue-200/50'
+                            : 'bg-emerald-50 text-emerald-600 border-emerald-200/50'
+                        }`}>
+                          {item.type}
+                        </span>
+                      </button>
+                    ))}
+                    {INDIAN_AIRPORTS.filter(item => 
+                      item.city.toLowerCase().includes(to.toLowerCase()) || 
+                      item.code.toLowerCase().includes(to.toLowerCase()) ||
+                      item.name.toLowerCase().includes(to.toLowerCase())
+                    ).length === 0 && (
+                      <div className="p-4 text-center text-xs text-slate-400 font-bold">No airports found</div>
+                    )}
+                  </div>
+                )}
               </div>
               <Field label="DEPARTURE">
                 <input 
