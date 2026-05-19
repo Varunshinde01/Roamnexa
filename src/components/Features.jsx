@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Shield, Map, Wallet, Ticket, HeartHandshake, Star, BookOpen, Crown } from 'lucide-react';
-import DigiLockerModal from './DigiLockerModal';
+import SyncVaultModal from './SyncVaultModal';
 import GoogleMapsModal from './GoogleMapsModal';
 import PayoneerWalletModal from './PayoneerWalletModal';
 
 const Features = () => {
-  const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(false);
+  const [isSyncOpen, setIsSyncOpen] = useState(false);
   const [isMapsOpen, setIsMapsOpen] = useState(false);
   const [isPayoneerOpen, setIsPayoneerOpen] = useState(false);
 
@@ -14,7 +14,7 @@ const Features = () => {
       title: "Smart Travel Tools",
       description: "Everything you need on the go, in one app.",
       items: [
-        { id: 'digilocker', icon: Shield, name: "Document Vault", desc: "Store passport, visa, tickets securely via DigiLocker" },
+        { id: 'sync', icon: Shield, name: "Document Vault", desc: "Store passport, visa, tickets securely via Sync.com" },
         { id: 'maps', icon: Map, name: "Offline Maps", desc: "Explore local spots and download Google Maps offline" },
         { id: 'payoneer', icon: Wallet, name: "Multi-currency Wallet", desc: "Pay locally and convert balances powered by Payoneer" }
       ]
@@ -49,7 +49,7 @@ const Features = () => {
   ];
 
   const handleCardClick = (id) => {
-    if (id === 'digilocker') setIsDigiLockerOpen(true);
+    if (id === 'sync') setIsSyncOpen(true);
     if (id === 'maps') setIsMapsOpen(true);
     if (id === 'payoneer') setIsPayoneerOpen(true);
   };
@@ -107,7 +107,7 @@ const Features = () => {
       </div>
 
       {/* Integration Modals */}
-      <DigiLockerModal isOpen={isDigiLockerOpen} onClose={() => setIsDigiLockerOpen(false)} />
+      <SyncVaultModal isOpen={isSyncOpen} onClose={() => setIsSyncOpen(false)} />
       <GoogleMapsModal isOpen={isMapsOpen} onClose={() => setIsMapsOpen(false)} />
       <PayoneerWalletModal isOpen={isPayoneerOpen} onClose={() => setIsPayoneerOpen(false)} />
     </div>
