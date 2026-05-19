@@ -5,6 +5,7 @@ import BookingForm from './components/BookingForm';
 import AIAgentSection from './components/AIAgentSection';
 import Features from './components/Features';
 import Footer from './components/Footer';
+import AIChatbot from './components/AIChatbot';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <AIAgentSection />
       <Features />
       <Footer />
+      <AIChatbot />
     </div>
   );
 }

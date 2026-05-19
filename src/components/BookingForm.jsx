@@ -147,11 +147,17 @@ const BookingForm = ({ onBookingSuccess }) => {
         setTimeout(() => setBookingMsg(''), 4000);
         setSearching(false); return;
       } else if (activeTab === 'ai-planner') {
-        setTimeout(() => {
-          setBookingMsg(`🤖 AI Itinerary generated for: "${aiPrompt}". Check your email for the full plan!`);
-          setTimeout(() => setBookingMsg(''), 5000);
+        if (!aiPrompt.trim()) {
+          setBookingMsg('⚠️ Please enter a travel description first!');
+          setTimeout(() => setBookingMsg(''), 3000);
           setSearching(false);
-        }, 1500); return;
+          return;
+        }
+        // Dispatch custom event to trigger AI Chatbot!
+        const event = new CustomEvent('open-ai-chat', { detail: { prompt: aiPrompt } });
+        window.dispatchEvent(event);
+        setSearching(false);
+        return;
       } else {
         setBookingMsg(`✅ Request submitted for ${activeTab}! Our team will contact you shortly.`);
         setTimeout(() => setBookingMsg(''), 4000);
