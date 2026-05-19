@@ -65,7 +65,7 @@ const Features = () => {
                 {category.items.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="bg-slate-50 rounded-3xl p-6 border border-slate-100 hover:bg-white hover:shadow-xl transition-all duration-300">
+                    <div key={i} className="bg-slate-50 rounded-3xl p-6 border border-slate-100 hover:bg-white hover-float cursor-pointer">
                       <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-4 shadow-sm text-slate-700">
                         <Icon size={24} />
                       </div>

@@ -51,3 +51,43 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Premium Infinite Floating Animation */
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: floatAnimation 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: floatAnimation 6s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: floatAnimation 2.5s ease-in-out infinite;
+}
+
+/* Hover Physical Floating Effect for Cards, Buttons, and Modules */
+.hover-float {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.hover-float:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 45px -12px rgba(15, 23, 42, 0.12);
+}
+
+.hover-float-button {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.25s ease;
+}
+.hover-float-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 24px -6px rgba(59, 130, 246, 0.25);
+}
+

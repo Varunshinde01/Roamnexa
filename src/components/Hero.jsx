@@ -60,7 +60,7 @@ const Hero = () => {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
           {stats.map((s, i) => (
-            <div key={i} className="rounded-2xl px-4 py-4 border"
+            <div key={i} className="rounded-2xl px-4 py-4 border hover-float cursor-pointer"
               style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', borderColor: 'rgba(255,255,255,0.1)' }}>
               <div className="text-2xl md:text-3xl font-black text-white">{s.value}</div>
               <div className="text-xs font-medium mt-1" style={{ color: '#93c5fd' }}>{s.label}</div>

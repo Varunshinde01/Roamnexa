@@ -245,7 +245,7 @@ const BookingForm = ({ onBookingSuccess }) => {
       </div>
 
       {/* Main Card - Extremely Modern & Fluidic */}
-      <div className="bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_25px_60px_rgba(8,112,184,0.08)] p-6 md:p-8 pt-8 pb-16 border border-white/60 relative">
+      <div className="bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_25px_60px_rgba(8,112,184,0.08)] p-6 md:p-8 pt-8 pb-16 border border-white/60 relative animate-float-slow">
 
         {/* FLIGHTS */}
         {activeTab === 'flight' && (
@@ -515,7 +515,7 @@ const BookingForm = ({ onBookingSuccess }) => {
           onClick={handleSearch} 
           disabled={searching}
           type="button"
-          className="absolute -bottom-7 left-1/2 -translate-x-1/2 flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-extrabold text-sm px-16 py-4 rounded-full shadow-xl shadow-indigo-500/25 transition-all duration-300 hover:scale-105 active:scale-95 uppercase tracking-widest whitespace-nowrap disabled:opacity-70 disabled:scale-100 cursor-pointer"
+          className="absolute -bottom-7 left-1/2 -translate-x-1/2 flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-extrabold text-sm px-16 py-4 rounded-full shadow-xl shadow-indigo-500/25 transition-all duration-300 hover:scale-105 active:scale-95 uppercase tracking-widest whitespace-nowrap disabled:opacity-70 disabled:scale-100 cursor-pointer hover-float-button"
         >
           {searching ? (
             <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

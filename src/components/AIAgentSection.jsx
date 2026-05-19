@@ -27,7 +27,7 @@ const AIAgentSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Card 1 */}
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+          <div className="bg-white rounded-3xl p-8 border border-slate-100 hover-float cursor-pointer group">
             <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Compass className="text-blue-600" size={28} />
             </div>
@@ -44,7 +44,7 @@ const AIAgentSection = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+          <div className="bg-white rounded-3xl p-8 border border-slate-100 hover-float cursor-pointer group">
             <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <MessageSquareText className="text-purple-600" size={28} />
             </div>
@@ -61,7 +61,7 @@ const AIAgentSection = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+          <div className="bg-white rounded-3xl p-8 border border-slate-100 hover-float cursor-pointer group">
             <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <TrendingDown className="text-rose-600" size={28} />
             </div>

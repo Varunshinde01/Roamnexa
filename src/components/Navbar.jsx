@@ -67,7 +67,7 @@ const Navbar = () => {
                 </div>
               ) : (
                 <button onClick={() => setIsAuthModalOpen(true)}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 shadow-lg">
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 shadow-lg hover-float-button cursor-pointer">
                   <User size={15} /> Login / Sign Up
                 </button>
               )}

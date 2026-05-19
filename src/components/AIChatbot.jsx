@@ -198,7 +198,7 @@ const AIChatbot = () => {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-14 h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 ${!isOpen ? 'animate-pulse' : ''}`}
+        className={`w-14 h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 ${!isOpen ? 'animate-float' : ''}`}
       >
         {isOpen ? <X size={24} /> : <Sparkles className="animate-spin-slow" size={24} />}
       </button>
