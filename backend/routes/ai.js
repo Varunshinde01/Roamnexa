@@ -14,7 +14,7 @@ if (process.env.GEMINI_API_KEY) {
   try {
     genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       systemInstruction: `You are Roamnexa's Smart Travel Agent, an enthusiastic, creative, and highly knowledgeable travel concierge.
 Your job is to help users plan itineraries, discover top attractions, suggest budget strategies, recommend local cuisines, and estimate flight/hotel rates.
 Keep your tone friendly, professional, and visually engaging. Use emojis, clear headers, bullet points, and markdown tables where appropriate.
