@@ -252,11 +252,40 @@ const BookingForm = ({ onBookingSuccess }) => {
                 </Field>
               </div>
               <Field label="DEPARTURE">
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent" />
+                <input 
+                  type="date" 
+                  value={date} 
+                  onChange={e => setDate(e.target.value)} 
+                  onClick={(e) => e.target.showPicker()}
+                  className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer" 
+                />
               </Field>
-              <Field label="RETURN">
-                <input type="date" value={returnDate} onChange={e => setReturnDate(e.target.value)} disabled={tripType==='oneway'} className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent disabled:opacity-40" placeholder="Add return date" />
-              </Field>
+              <div 
+                onClick={() => { 
+                  if (tripType === 'oneway') {
+                    setTripType('roundtrip');
+                    setTimeout(() => {
+                      const returnInput = document.getElementById('return-date-input');
+                      if (returnInput) returnInput.showPicker();
+                    }, 50);
+                  }
+                }}
+                className="cursor-pointer"
+              >
+                <Field label="RETURN">
+                  <input 
+                    id="return-date-input"
+                    type="date" 
+                    value={returnDate} 
+                    onChange={e => setReturnDate(e.target.value)} 
+                    onClick={(e) => {
+                      if (tripType !== 'oneway') e.target.showPicker();
+                    }}
+                    className={`text-lg font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer ${tripType === 'oneway' ? 'opacity-40' : ''}`} 
+                    placeholder="Add return date" 
+                  />
+                </Field>
+              </div>
               <Field label="TRAVELLERS & CLASS">
                 <select value={`${passengers}|${cabinClass}`} onChange={e => { const [p,c]=e.target.value.split('|'); setPassengers(p); setCabinClass(c); }} className="text-base font-bold text-slate-900 w-full outline-none bg-transparent">
                   {['1 Adult','2 Adults','3 Adults','4 Adults'].map(p => ['Economy','Business','First Class'].map(c => (
@@ -275,10 +304,22 @@ const BookingForm = ({ onBookingSuccess }) => {
               <input value={city} onChange={e => setCity(e.target.value)} placeholder="Where do you want to stay?" className="text-xl font-bold text-slate-900 w-full outline-none bg-transparent" />
             </Field>
             <Field label="CHECK IN">
-              <input type="date" value={checkin} onChange={e => setCheckin(e.target.value)} className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent" />
+              <input 
+                type="date" 
+                value={checkin} 
+                onChange={e => setCheckin(e.target.value)} 
+                onClick={(e) => e.target.showPicker()}
+                className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer" 
+              />
             </Field>
             <Field label="CHECK OUT">
-              <input type="date" value={checkout} onChange={e => setCheckout(e.target.value)} className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent" />
+              <input 
+                type="date" 
+                value={checkout} 
+                onChange={e => setCheckout(e.target.value)} 
+                onClick={(e) => e.target.showPicker()}
+                className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer" 
+              />
             </Field>
             <Field label="ROOMS & GUESTS">
               <select value={rooms} onChange={e => setRooms(e.target.value)} className="text-base font-bold text-slate-900 w-full outline-none bg-transparent">
@@ -295,7 +336,13 @@ const BookingForm = ({ onBookingSuccess }) => {
               <input value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. Bali, Europe, Rajasthan" className="text-xl font-bold text-slate-900 w-full outline-none bg-transparent" />
             </Field>
             <Field label="DEPARTURE DATE">
-              <input type="date" value={date} onChange={e => setDate(e.target.value)} className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent" />
+              <input 
+                type="date" 
+                value={date} 
+                onChange={e => setDate(e.target.value)} 
+                onClick={(e) => e.target.showPicker()}
+                className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer" 
+              />
             </Field>
             <Field label="DURATION">
               <select className="text-base font-bold text-slate-900 w-full outline-none bg-transparent">
@@ -320,7 +367,13 @@ const BookingForm = ({ onBookingSuccess }) => {
               <input value={trainTo} onChange={e => setTrainTo(e.target.value)} className="text-xl font-bold text-slate-900 w-full outline-none bg-transparent" />
             </Field>
             <Field label="DATE OF JOURNEY">
-              <input type="date" value={date} onChange={e => setDate(e.target.value)} className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent" />
+              <input 
+                type="date" 
+                value={date} 
+                onChange={e => setDate(e.target.value)} 
+                onClick={(e) => e.target.showPicker()}
+                className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer" 
+              />
             </Field>
             <Field label="QUOTA">
               <select className="text-base font-bold text-slate-900 w-full outline-none bg-transparent">
@@ -340,7 +393,13 @@ const BookingForm = ({ onBookingSuccess }) => {
               <input value={busTo} onChange={e => setBusTo(e.target.value)} placeholder="Enter destination city" className="text-xl font-bold text-slate-900 w-full outline-none bg-transparent" />
             </Field>
             <Field label="DATE OF JOURNEY">
-              <input type="date" value={busDate} onChange={e => setBusDate(e.target.value)} className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent" />
+              <input 
+                type="date" 
+                value={busDate} 
+                onChange={e => setBusDate(e.target.value)} 
+                onClick={(e) => e.target.showPicker()}
+                className="text-lg font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer" 
+              />
             </Field>
           </div>
         )}
@@ -355,7 +414,13 @@ const BookingForm = ({ onBookingSuccess }) => {
               <input value={drop} onChange={e => setDrop(e.target.value)} placeholder="Enter drop address" className="text-xl font-bold text-slate-900 w-full outline-none bg-transparent" />
             </Field>
             <Field label="PICKUP DATE & TIME">
-              <input type="datetime-local" value={cabDate} onChange={e => setCabDate(e.target.value)} className="text-base font-bold text-slate-900 w-full outline-none bg-transparent" />
+              <input 
+                type="datetime-local" 
+                value={cabDate} 
+                onChange={e => setCabDate(e.target.value)} 
+                onClick={(e) => e.target.showPicker()}
+                className="text-base font-bold text-slate-900 w-full outline-none bg-transparent cursor-pointer" 
+              />
             </Field>
           </div>
         )}
