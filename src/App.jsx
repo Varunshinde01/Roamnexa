@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import BookingForm from './components/BookingForm';
-import AIAgentSection from './components/AIAgentSection';
 import Features from './components/Features';
 import Footer from './components/Footer';
 import AIChatbot from './components/AIChatbot';
@@ -19,7 +18,6 @@ function App() {
       {/* Spacer for the overlapping search button */}
       <div className="h-12"></div>
       
-      <AIAgentSection />
       <Features />
       <Footer />
       <AIChatbot />
