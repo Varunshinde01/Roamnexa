@@ -56,9 +56,58 @@ router.get('/', async (req, res) => {
 router.get('/search/flights', (req, res) => {
   const { from = 'Delhi (DEL)', to = 'Mumbai (BOM)', date } = req.query;
   
-  // Clean values for display
-  const originCode = from.includes('(') ? from.split('(')[1].split(')')[0] : 'DEL';
-  const destCode = to.includes('(') ? to.split('(')[1].split(')')[0] : 'BOM';
+  // Smart helper to extract or lookup IATA airport codes dynamically!
+  const getCode = (val, defaultCode) => {
+    if (!val) return defaultCode;
+    const cleanVal = val.trim();
+    if (cleanVal.includes('(')) {
+      const match = cleanVal.match(/\(([^)]+)\)/);
+      if (match) return match[1].toUpperCase();
+    }
+    
+    // Quick Indian City to IATA code mapper
+    const lookup = [
+      { name: 'delhi', code: 'DEL' },
+      { name: 'mumbai', code: 'BOM' },
+      { name: 'bangalore', code: 'BLR' },
+      { name: 'hyderabad', code: 'HYD' },
+      { name: 'chennai', code: 'MAA' },
+      { name: 'kolkata', code: 'CCU' },
+      { name: 'kochi', code: 'COK' },
+      { name: 'ahmedabad', code: 'AMD' },
+      { name: 'pune', code: 'PNQ' },
+      { name: 'goa', code: 'GOI' },
+      { name: 'mopa', code: 'GOX' },
+      { name: 'jaipur', code: 'JAI' },
+      { name: 'lucknow', code: 'LKO' },
+      { name: 'amritsar', code: 'ATQ' },
+      { name: 'guwahati', code: 'GAU' },
+      { name: 'thiruvananthapuram', code: 'TRV' },
+      { name: 'srinagar', code: 'SXR' },
+      { name: 'bhubaneswar', code: 'BBI' },
+      { name: 'bagdogra', code: 'IXB' },
+      { name: 'nagpur', code: 'NAG' },
+      { name: 'patna', code: 'PAT' },
+      { name: 'chandigarh', code: 'IXC' },
+      { name: 'coimbatore', code: 'CJB' },
+      { name: 'varanasi', code: 'VNS' },
+      { name: 'visakhapatnam', code: 'VTZ' },
+      { name: 'indore', code: 'IDR' },
+      { name: 'ranchi', code: 'IXR' },
+      { name: 'surat', code: 'STV' },
+      { name: 'dehradun', code: 'DED' },
+      { name: 'udaipur', code: 'UDR' },
+      { name: 'jammu', code: 'IXJ' },
+      { name: 'raipur', code: 'RPR' },
+      { name: 'jodhpur', code: 'JDH' }
+    ].find(item => cleanVal.toLowerCase().includes(item.name) || item.name.includes(cleanVal.toLowerCase()));
+    
+    if (lookup) return lookup.code;
+    return cleanVal.slice(0, 3).toUpperCase();
+  };
+
+  const originCode = getCode(from, 'DEL');
+  const destCode = getCode(to, 'BOM');
 
   const airlinesList = [
     { airline: 'IndiGo', code: '6E-2145', logo: '✈️', departure: '06:00', arrival: '08:15', duration: '2h 15m', price: 3499, class: 'Economy', stops: 'Non-stop', baggage: '15kg', terminal: 'T1D', gate: 'G12', status: 'ON TIME', delay: 0 },
