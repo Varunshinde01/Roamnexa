@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { sendConfirmationEmail } from '../utils/mailer.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'roamnexa_secret_2024';
@@ -17,6 +18,9 @@ router.post('/register', async (req, res) => {
 
     const user = await User.create({ name, email, password, phone });
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+
+    // Send account creation confirmation email asynchronously
+    sendConfirmationEmail(user.email, user.name);
 
     res.status(201).json({
       token,
