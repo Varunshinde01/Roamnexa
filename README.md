@@ -1,16 +1,45 @@
-# React + Vite
+# Roamnexa 🌍✈️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An all-in-one, AI-powered travel platform designed to make planning and booking trips effortless.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **AI Travel Agent**: Automated, highly personalized itinerary planning, smart re-booking, and travel assistance.
+- **Unified Multi-Modal Booking**: Scans, compares, and books flights, hotels, cabs, and trains all in one place.
+- **Smart Travel Utilities**:
+  - Secure document vault for your tickets and IDs.
+  - Live flight and transit tracking with smart delay notifications.
+- **Community & Loyalty Ecosystem**: Earn reward points and share your travel experiences with other globetrotters.
+- **Modern User Experience**: A sleek, premium, MakeMyTrip-inspired responsive interface with rich micro-interactions and dark mode capabilities.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+- **React** (Vite-powered, rapid hot module replacement)
+- **Tailwind CSS** (Modern utility-first styling)
 
-## Expanding the ESLint configuration
+### Backend
+- **Node.js** & **Express**
+- **MongoDB** (Database for secure user authentication and booking storage)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📦 Getting Started
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/Varunshinde01/Roamnexa.git
+cd Roamnexa
+```
+
+### 2. Set up the Frontend
+```bash
+npm install
+npm run dev
+```
+
+### 3. Set up the Backend
+```bash
+cd backend
+npm install
+npm start
+```
+
