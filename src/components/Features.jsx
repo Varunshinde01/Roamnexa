@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Map, Wallet, Ticket, HeartHandshake, Star, BookOpen, Crown } from 'lucide-react';
+import { Shield, Map, Wallet, Ticket, HeartHandshake, Star, BookOpen, Crown, Coffee } from 'lucide-react';
 import SyncVaultModal from './SyncVaultModal';
 import GoogleMapsModal from './GoogleMapsModal';
 import PayoneerWalletModal from './PayoneerWalletModal';
@@ -23,7 +23,7 @@ const Features = () => {
       title: "Lifestyle Add-ons",
       description: "Elevate your travel experience.",
       items: [
-        { icon: Ticket, name: "Experiences", desc: "Book tours, food walks, adventure activities" },
+        { icon: Coffee, name: "Airport Lounge", desc: "Relax in premium airport lounges globally with special rates" },
         { icon: Shield, name: "Travel Insurance", desc: "On-the-spot coverage, claims via app" },
         { icon: Wallet, name: "SIM & eSIM", desc: "Buy international data plans pre-departure" }
       ]
