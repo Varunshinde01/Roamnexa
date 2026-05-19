@@ -244,8 +244,15 @@ const BookingForm = ({ onBookingSuccess }) => {
                 <input value={from} onChange={e => setFrom(e.target.value)} className="text-2xl font-black text-slate-900 w-full outline-none bg-transparent" />
               </Field>
               <div className="relative">
-                <button onClick={swap} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white border-2 border-blue-200 rounded-full p-1 hover:bg-blue-50 hidden md:block">
-                  <ArrowLeftRight size={16} className="text-blue-600" />
+                <button 
+                  onClick={swap} 
+                  type="button"
+                  title="Swap Cities"
+                  className="absolute z-30 bg-white border-2 border-blue-200 rounded-full p-2.5 hover:bg-blue-50 shadow-md transition-all hover:scale-110 active:scale-95 cursor-pointer
+                             top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                             md:top-1/2 md:-translate-y-1/2 md:left-0 md:-translate-x-1/2"
+                >
+                  <ArrowLeftRight size={16} className="text-blue-600 transition-transform duration-300 rotate-90 md:rotate-0" />
                 </button>
                 <Field label="TO">
                   <input value={to} onChange={e => setTo(e.target.value)} className="text-2xl font-black text-slate-900 w-full outline-none bg-transparent" />
