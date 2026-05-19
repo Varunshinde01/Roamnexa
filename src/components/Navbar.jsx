@@ -11,8 +11,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-white/5 py-3 px-6 rounded-full shadow-lg transition-all duration-300">
-        <div className="w-full">
+      <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/5 py-4 shadow-md transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center gap-2">
@@ -82,7 +82,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl absolute top-full left-0 w-full border border-slate-200/50 dark:border-white/10 p-4 shadow-xl z-50 rounded-[2rem] mt-2">
+          <div className="md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl absolute top-full left-0 w-full border-b border-slate-200/50 dark:border-white/10 p-5 shadow-xl z-50">
             <div className="flex flex-col space-y-4">
               <a href="#offers" className="text-slate-700 dark:text-slate-200 font-medium flex items-center gap-2"><Percent size={16} className="text-orange-500" /> Offers</a>
               <a href="#features" className="text-slate-700 dark:text-slate-200 font-medium flex items-center gap-2"><Briefcase size={16} /> Corporate Travel</a>
