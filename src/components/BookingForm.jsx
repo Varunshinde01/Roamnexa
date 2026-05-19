@@ -22,34 +22,214 @@ const Field = ({ label, children }) => (
 );
 
 const ResultsModal = ({ results, type, onClose, onBook }) => {
+  const [modalTab, setModalTab] = useState('tickets'); // 'tickets' or 'timetable'
+  const [searchTerm, setSearchTerm] = useState('');
+  
   if (!results) return null;
   return (
-    <div className="fixed inset-0 z-[200] bg-black/60 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white">
-          <h2 className="text-xl font-bold text-slate-800">
-            {type === 'flight' ? `✈️ Flights: ${results.from} → ${results.to}` :
-             type === 'hotel' ? `🏨 Hotels in ${results.city}` :
-             `🚂 Trains: ${results.from} → ${results.to}`}
-          </h2>
-          <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full"><X size={20} /></button>
+    <div className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto border border-white/40" onClick={e => e.stopPropagation()}>
+        
+        {/* Header */}
+        <div className="flex flex-col p-6 pb-4 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur-md z-50">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-black text-slate-800 tracking-wide uppercase">
+              {type === 'flight' ? `✈️ Flights: ${results.from} ⇄ ${results.to}` :
+               type === 'hotel' ? `🏨 Hotels in ${results.city}` :
+               `🚂 Trains: ${results.from} ⇄ ${results.to}`}
+            </h2>
+            <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"><X size={20} /></button>
+          </div>
+
+          {/* Sub-tabs for Flight search */}
+          {type === 'flight' && (
+            <div className="flex bg-slate-100/80 p-1 rounded-2xl w-full mt-4 border border-slate-200/20 max-w-sm">
+              <button
+                onClick={() => setModalTab('tickets')}
+                className={`flex-1 py-2 rounded-xl text-xs font-black transition-all cursor-pointer text-center uppercase tracking-wider ${
+                  modalTab === 'tickets' 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                🎟️ Book Tickets
+              </button>
+              <button
+                onClick={() => setModalTab('timetable')}
+                className={`flex-1 py-2 rounded-xl text-xs font-black transition-all cursor-pointer text-center uppercase tracking-wider ${
+                  modalTab === 'timetable' 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                📋 Live Timetable
+              </button>
+            </div>
+          )}
         </div>
-        <div className="p-4 space-y-3">
-          {type === 'flight' && results.flights?.map(f => (
-            <div key={f.id} className="border border-slate-200 rounded-xl p-4 flex items-center justify-between hover:shadow-md transition-shadow">
-              <div>
-                <div className="font-bold text-slate-800">{f.airline} <span className="text-slate-400 text-sm font-normal">({f.code})</span></div>
-                <div className="text-2xl font-black text-slate-900 mt-1">{f.departure} <span className="text-slate-400 text-base font-normal">→</span> {f.arrival}</div>
-                <div className="text-sm text-slate-500">{f.duration} • {f.stops} • {f.baggage}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-black text-blue-600">₹{f.price.toLocaleString()}</div>
-                <div className="text-xs text-slate-500 mb-2">{f.class}</div>
-                <button onClick={() => onBook({ type: 'flight', from: results.from, to: results.to, price: f.price, details: f })}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">Book Now</button>
+
+        <div className="p-6 space-y-4">
+          {/* Available Tickets Tab */}
+          {type === 'flight' && modalTab === 'tickets' && results.flights?.map(f => (
+            <div key={f.id} className="bg-gradient-to-br from-white to-slate-50/50 border border-slate-200 rounded-[2rem] p-5 hover:shadow-lg transition-all duration-300 relative overflow-hidden group hover-float">
+              {/* Boarding pass ticket style */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full filter blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+              
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                
+                {/* Airline details */}
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center border border-blue-100/50 shadow-inner">
+                    <span className="text-xl">{f.logo || '✈️'}</span>
+                  </div>
+                  <div>
+                    <div className="font-extrabold text-slate-800 flex items-center gap-1.5">
+                      {f.airline}
+                      <span className="bg-slate-100 text-slate-500 text-[10px] px-2 py-0.5 rounded-md font-extrabold border border-slate-200/50">{f.code}</span>
+                    </div>
+                    <div className="text-xs font-bold text-slate-400 mt-0.5 uppercase tracking-wider">{f.class} Class</div>
+                  </div>
+                </div>
+
+                {/* Departure & Arrival Schedule details */}
+                <div className="flex items-center justify-between sm:justify-start gap-6 py-2 sm:py-0 border-y sm:border-y-0 border-slate-100">
+                  <div className="text-center sm:text-left">
+                    <div className="text-xl font-black text-slate-800">{f.departure}</div>
+                    <div className="text-[11px] font-black text-blue-600 tracking-widest mt-0.5">{results.from}</div>
+                    <div className="text-[10px] text-slate-400 font-bold">Terminal {f.terminal || 'T3'}</div>
+                  </div>
+
+                  <div className="flex flex-col items-center min-w-[70px]">
+                    <div className="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest">{f.duration}</div>
+                    <div className="w-full flex items-center gap-1 my-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                      <div className="flex-1 h-0.5 border-t-2 border-dashed border-indigo-200"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                    </div>
+                    <div className="text-[9px] font-bold text-slate-400 whitespace-nowrap">{f.stops}</div>
+                  </div>
+
+                  <div className="text-center sm:text-right">
+                    <div className="text-xl font-black text-slate-800">{f.arrival}</div>
+                    <div className="text-[11px] font-black text-blue-600 tracking-widest mt-0.5">{results.to}</div>
+                    <div className="text-[10px] text-slate-400 font-bold">Gate {f.gate || 'G12'}</div>
+                  </div>
+                </div>
+
+                {/* Pricing and Action */}
+                <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2 shrink-0">
+                  <div>
+                    <div className="text-2xl font-black text-blue-600">₹{f.price.toLocaleString()}</div>
+                    <div className="text-[10px] font-bold text-slate-400 text-right uppercase tracking-wider">{f.baggage} check-in</div>
+                  </div>
+                  <button 
+                    onClick={() => onBook({ type: 'flight', from: results.from, to: results.to, price: f.price, details: f })}
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-5 py-2.5 rounded-2xl text-xs font-black transition-all duration-200 hover:scale-105 active:scale-95 shadow-md shadow-blue-500/10 cursor-pointer uppercase tracking-wider shrink-0"
+                  >
+                    Book Flight
+                  </button>
+                </div>
+
               </div>
             </div>
           ))}
+
+          {/* Live Airport Timetable Tab */}
+          {type === 'flight' && modalTab === 'timetable' && (
+            <div className="space-y-4">
+              {/* Filter Panel */}
+              <div className="bg-slate-900 rounded-3xl p-5 text-white shadow-lg border border-slate-800 relative overflow-hidden group">
+                <div className="absolute right-0 top-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+                <div className="flex items-center justify-between flex-wrap gap-4 relative z-10">
+                  <div>
+                    <h3 className="font-extrabold text-sm text-emerald-400 tracking-wide flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                      LIVE TERMINAL DEPARTURE TIMETABLE
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">Real-time gate and delay streams between {results.from} and {results.to}</p>
+                  </div>
+                  
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search Flight or Airline..."
+                    className="bg-slate-800 text-xs text-slate-200 border border-slate-700 rounded-xl px-4 py-2 focus:outline-none focus:border-emerald-500 max-w-[200px]"
+                  />
+                </div>
+              </div>
+
+              {/* Timetable Table */}
+              <div className="bg-slate-950 border border-slate-800 rounded-[2rem] overflow-hidden shadow-xl">
+                <div className="grid grid-cols-5 gap-4 bg-slate-900/60 p-4 border-b border-slate-800 text-slate-400 text-xs font-black uppercase tracking-wider">
+                  <div>Airline / Flight</div>
+                  <div className="text-center">Departure</div>
+                  <div className="text-center">Terminal / Gate</div>
+                  <div className="text-center">Duration</div>
+                  <div className="text-right">Live Status</div>
+                </div>
+
+                <div className="divide-y divide-slate-900/70">
+                  {results.flights
+                    ?.filter(f => f.airline.toLowerCase().includes(searchTerm.toLowerCase()) || f.code.toLowerCase().includes(searchTerm.toLowerCase()))
+                    .map(f => {
+                      const isDelayed = f.status === 'DELAYED';
+                      const isBoarding = f.status === 'BOARDING';
+                      const isGateOpen = f.status === 'GATE OPEN';
+                      
+                      let statusBadgeClass = 'bg-blue-950 text-blue-400 border-blue-900';
+                      let pulseColor = 'bg-blue-400';
+                      if (isDelayed) {
+                        statusBadgeClass = 'bg-rose-950 text-rose-400 border-rose-900';
+                        pulseColor = 'bg-rose-400';
+                      } else if (isBoarding) {
+                        statusBadgeClass = 'bg-amber-950 text-amber-400 border-amber-900';
+                        pulseColor = 'bg-amber-400';
+                      } else if (isGateOpen || f.status === 'ON TIME') {
+                        statusBadgeClass = 'bg-emerald-950 text-emerald-400 border-emerald-900';
+                        pulseColor = 'bg-emerald-400';
+                      }
+
+                      return (
+                        <div key={f.id} className="grid grid-cols-5 gap-4 p-4 items-center hover:bg-slate-900/20 transition-all text-xs font-bold border-b border-slate-900/50">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm">{f.logo}</span>
+                            <div>
+                              <div className="text-slate-200 font-extrabold">{f.airline}</div>
+                              <div className="text-slate-500 font-bold text-[10px] tracking-wide mt-0.5">{f.code}</div>
+                            </div>
+                          </div>
+
+                          <div className="text-center">
+                            <div className="text-slate-200 font-extrabold text-sm">{f.departure}</div>
+                            {isDelayed && (
+                              <div className="text-[10px] text-rose-400 font-bold mt-0.5">Est {f.arrival} (+{f.delay}m)</div>
+                            )}
+                          </div>
+
+                          <div className="text-center">
+                            <div className="text-slate-200 font-extrabold">Terminal {f.terminal}</div>
+                            <div className="text-slate-400 text-[10px] mt-0.5">Gate {f.gate}</div>
+                          </div>
+
+                          <div className="text-center text-slate-400">
+                            <div>{f.duration}</div>
+                            <div className="text-[9px] mt-0.5 text-slate-500">{f.stops}</div>
+                          </div>
+
+                          <div className="text-right flex items-center justify-end gap-1.5">
+                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black border uppercase tracking-wider ${statusBadgeClass}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${pulseColor} animate-pulse`}></span>
+                              {f.status}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+          )}
           {type === 'hotel' && results.hotels?.map(h => (
             <div key={h.id} className="border border-slate-200 rounded-xl overflow-hidden flex hover:shadow-md transition-shadow">
               <img src={h.image} alt={h.name} className="w-32 h-32 object-cover flex-shrink-0" />
@@ -288,7 +468,38 @@ const BookingForm = ({ onBookingSuccess }) => {
                 );
               })}
             </div>
-
+            {/* Dedicated Quick Cities Presets Selector */}
+            <div className="mb-6 flex flex-wrap items-center gap-2 animate-fade-in">
+              <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider bg-slate-50 px-2 py-1 rounded-md shrink-0 border border-slate-100/50">📍 Quick Select Route:</span>
+              {[
+                { label: "Delhi ⇄ Mumbai", from: "Delhi (DEL)", to: "Mumbai (BOM)" },
+                { label: "Bangalore ⇄ Delhi", from: "Bangalore (BLR)", to: "Delhi (DEL)" },
+                { label: "Mumbai ⇄ Goa", from: "Mumbai (BOM)", to: "Goa (GOI)" },
+                { label: "Delhi ⇄ Dubai", from: "Delhi (DEL)", to: "Dubai (DXB)" }
+              ].map((p, idx) => {
+                const isMatching = (from === p.from && to === p.to) || (from === p.to && to === p.from);
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      if (from === p.from && to === p.to) {
+                        setFrom(p.to); setTo(p.from);
+                      } else {
+                        setFrom(p.from); setTo(p.to);
+                      }
+                    }}
+                    className={`text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-200 border cursor-pointer hover-float-button ${
+                      isMatching
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
+                        : 'bg-white text-slate-500 border-slate-150 hover:border-slate-300 hover:text-slate-700 shadow-sm'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-5 border border-slate-100 rounded-3xl overflow-hidden bg-white shadow-[0_4px_24px_rgba(15,23,42,0.02)] divide-y md:divide-y-0 md:divide-x divide-slate-100">
               <Field label="FROM">
                 <input value={from} onChange={e => setFrom(e.target.value)} className="text-xl font-extrabold text-slate-800 w-full outline-none bg-transparent placeholder-slate-400" />

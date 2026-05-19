@@ -54,15 +54,36 @@ router.get('/', async (req, res) => {
 
 // Mock flight search
 router.get('/search/flights', (req, res) => {
-  const { from = 'DEL', to = 'BOM', date } = req.query;
-  const airlines = [
-    { airline: 'IndiGo', code: '6E-2145', logo: '✈️', departure: '06:00', arrival: '08:15', duration: '2h 15m', price: 3499, class: 'Economy', stops: 'Non-stop', baggage: '15kg' },
-    { airline: 'Air India', code: 'AI-805', logo: '✈️', departure: '09:30', arrival: '12:00', duration: '2h 30m', price: 4800, class: 'Economy', stops: 'Non-stop', baggage: '25kg' },
-    { airline: 'SpiceJet', code: 'SG-322', logo: '✈️', departure: '13:15', arrival: '15:30', duration: '2h 15m', price: 2899, class: 'Economy', stops: 'Non-stop', baggage: '15kg' },
-    { airline: 'Vistara', code: 'UK-945', logo: '✈️', departure: '17:45', arrival: '20:00', duration: '2h 15m', price: 6200, class: 'Business', stops: 'Non-stop', baggage: '25kg' },
-    { airline: 'GoFirst', code: 'G8-215', logo: '✈️', departure: '21:00', arrival: '23:30', duration: '2h 30m', price: 2499, class: 'Economy', stops: 'Non-stop', baggage: '15kg' },
+  const { from = 'Delhi (DEL)', to = 'Mumbai (BOM)', date } = req.query;
+  
+  // Clean values for display
+  const originCode = from.includes('(') ? from.split('(')[1].split(')')[0] : 'DEL';
+  const destCode = to.includes('(') ? to.split('(')[1].split(')')[0] : 'BOM';
+
+  const airlinesList = [
+    { airline: 'IndiGo', code: '6E-2145', logo: '✈️', departure: '06:00', arrival: '08:15', duration: '2h 15m', price: 3499, class: 'Economy', stops: 'Non-stop', baggage: '15kg', terminal: 'T1D', gate: 'G12', status: 'ON TIME', delay: 0 },
+    { airline: 'Air India', code: 'AI-805', logo: '✈️', departure: '09:30', arrival: '12:00', duration: '2h 30m', price: 4800, class: 'Economy', stops: 'Non-stop', baggage: '25kg', terminal: 'T3', gate: 'G18', status: 'BOARDING', delay: 0 },
+    { airline: 'Vistara', code: 'UK-945', logo: '✈️', departure: '12:15', arrival: '14:35', duration: '2h 20m', price: 6200, class: 'Business', stops: 'Non-stop', baggage: '30kg', terminal: 'T3', gate: 'G24', status: 'DELAYED', delay: 15 },
+    { airline: 'SpiceJet', code: 'SG-322', logo: '✈️', departure: '14:45', arrival: '17:05', duration: '2h 20m', price: 2899, class: 'Economy', stops: 'Non-stop', baggage: '15kg', terminal: 'T1C', gate: 'G08', status: 'ON TIME', delay: 0 },
+    { airline: 'Akasa Air', code: 'QP-1102', logo: '✈️', departure: '16:00', arrival: '18:15', duration: '2h 15m', price: 3100, class: 'Economy', stops: 'Non-stop', baggage: '15kg', terminal: 'T2', gate: 'G04', status: 'GATE OPEN', delay: 0 },
+    { airline: 'Air India Express', code: 'IX-402', logo: '✈️', departure: '18:30', arrival: '20:50', duration: '2h 20m', price: 2950, class: 'Economy', stops: 'Non-stop', baggage: '20kg', terminal: 'T3', gate: 'G15', status: 'ON TIME', delay: 0 },
+    { airline: 'Emirates', code: 'EK-512', logo: '✈️', departure: '20:15', arrival: '22:30', duration: '2h 15m', price: 14500, class: 'First Class', stops: 'Non-stop', baggage: '40kg', terminal: 'T3', gate: 'G30', status: 'ON TIME', delay: 0 },
+    { airline: 'Qatar Airways', code: 'QR-571', logo: '✈️', departure: '22:00', arrival: '00:15', duration: '2h 15m', price: 15200, class: 'Business', stops: 'Non-stop', baggage: '35kg', terminal: 'T3', gate: 'G32', status: 'ON TIME', delay: 0 },
+    { airline: 'Singapore Airlines', code: 'SQ-403', logo: '✈️', departure: '23:30', arrival: '01:50', duration: '2h 20m', price: 13900, class: 'Business', stops: 'Non-stop', baggage: '35kg', terminal: 'T3', gate: 'G35', status: 'DELAYED', delay: 30 }
   ];
-  res.json({ flights: airlines.map((f, i) => ({ id: i + 1, ...f, from, to, date })), from, to, date });
+  
+  res.json({ 
+    flights: airlinesList.map((f, i) => ({ 
+      id: i + 1, 
+      ...f, 
+      from: originCode, 
+      to: destCode, 
+      date 
+    })), 
+    from: originCode, 
+    to: destCode, 
+    date 
+  });
 });
 
 // Mock hotel search
