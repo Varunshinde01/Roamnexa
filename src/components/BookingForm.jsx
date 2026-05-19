@@ -121,6 +121,12 @@ const BookingForm = ({ onBookingSuccess }) => {
   const [currency, setCurrency] = useState('USD');
   const [amount, setAmount] = useState('');
   const [aiPrompt, setAiPrompt] = useState('');
+  const [aiDays, setAiDays] = useState('5');
+  const [aiBudget, setAiBudget] = useState('80,000');
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [showDaysInput, setShowDaysInput] = useState(false);
+  const [showBudgetInput, setShowBudgetInput] = useState(false);
+  const [showInterestsInput, setShowInterestsInput] = useState(false);
   const [results, setResults] = useState(null);
   const [resultType, setResultType] = useState('');
   const [searching, setSearching] = useState(false);
@@ -147,14 +153,26 @@ const BookingForm = ({ onBookingSuccess }) => {
         setTimeout(() => setBookingMsg(''), 4000);
         setSearching(false); return;
       } else if (activeTab === 'ai-planner') {
-        if (!aiPrompt.trim()) {
+        let finalPrompt = aiPrompt.trim();
+        if (!finalPrompt) {
           setBookingMsg('⚠️ Please enter a travel description first!');
           setTimeout(() => setBookingMsg(''), 3000);
           setSearching(false);
           return;
         }
+
+        // Dynamically append selected floating options for premium fidelity!
+        const additions = [];
+        if (showDaysInput && aiDays) additions.push(`${aiDays} Days`);
+        if (showBudgetInput && aiBudget) additions.push(`Budget: ₹${aiBudget}`);
+        if (showInterestsInput && selectedInterests.length > 0) additions.push(`Interests: ${selectedInterests.join(', ')}`);
+
+        if (additions.length > 0) {
+          finalPrompt += ` (${additions.join(' • ')})`;
+        }
+
         // Dispatch custom event to trigger AI Chatbot!
-        const event = new CustomEvent('open-ai-chat', { detail: { prompt: aiPrompt } });
+        const event = new CustomEvent('open-ai-chat', { detail: { prompt: finalPrompt } });
         window.dispatchEvent(event);
         setSearching(false);
         return;
@@ -484,28 +502,191 @@ const BookingForm = ({ onBookingSuccess }) => {
         {/* AI PLANNER */}
         {activeTab === 'ai-planner' && (
           <>
-            <div className="mb-5 bg-gradient-to-r from-purple-600 to-indigo-600 p-5 rounded-2xl text-white shadow-md flex items-center gap-4 animate-fade-in">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm animate-pulse">
-                <Sparkles className="text-white" size={20} />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm tracking-wide">Roamnexa AI Itinerary Planner</h3>
-                <p className="text-xs text-purple-100 mt-0.5">Describe your dream vacation, and our smart agent will draft a complete travel schedule.</p>
+            <div className="mb-6 bg-gradient-to-r from-purple-600/95 via-indigo-600/95 to-blue-600/95 backdrop-blur-xl border border-purple-500/20 p-5 rounded-[2rem] text-white shadow-lg flex items-center justify-between gap-4 animate-fade-in relative overflow-hidden group">
+              {/* Floating decorative gradient ball in the corner of the banner */}
+              <div className="absolute -right-12 -top-12 w-28 h-28 bg-purple-500/30 rounded-full mix-blend-screen filter blur-xl group-hover:scale-125 transition-transform duration-500"></div>
+              
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 animate-float shadow-inner">
+                  <Sparkles className="text-yellow-200 animate-pulse" size={22} />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base tracking-wide flex items-center gap-2">
+                    Roamnexa AI Itinerary Planner 
+                    <span className="bg-yellow-400/20 text-yellow-300 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-yellow-400/30">v2.0 Beta</span>
+                  </h3>
+                  <p className="text-xs text-purple-100/90 mt-0.5">Tell our smart concierge your desires, and we will compile a flawless travel schedule instantly.</p>
+                </div>
               </div>
             </div>
-            <div className="bg-slate-50/50 hover:bg-slate-50 border-2 border-purple-200/70 focus-within:border-purple-500 focus-within:bg-white focus-within:shadow-[0_0_20px_rgba(147,51,234,0.08)] rounded-3xl p-6 transition-all duration-300 relative overflow-hidden">
+
+            <div className="bg-white/40 backdrop-blur-md border border-purple-100 rounded-[2.2rem] p-6 pt-7 transition-all duration-300 focus-within:border-purple-400 focus-within:bg-white focus-within:shadow-[0_20px_50px_rgba(147,51,234,0.08)] relative overflow-hidden hover-float">
+              
+              {/* Dynamic suggestion starter pills to immediately wow the user! */}
+              <div className="mb-4 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                <span className="text-[10px] text-purple-500 font-extrabold uppercase tracking-wider bg-purple-50 px-2 py-1 rounded-md shrink-0">💡 Quick Start:</span>
+                {[
+                  { label: "🌴 Bali Honeymoon", prompt: "A 5-day romantic trip to Bali under ₹1,20,000. Include scenic stays, sunset dinner cruise, and jungle temple tours." },
+                  { label: "🗼 Paris Arts", prompt: "A 3-day cultural art journey to Paris. Include tickets to the Louvre, a boat cruise, and cozy historic cafés." },
+                  { label: "⛰️ Swiss Alps", prompt: "A 7-day winter retreat in Interlaken, Switzerland. Include high-altitude train rides and alpine skiing." },
+                  { label: "⛩️ Tokyo Culture", prompt: "A 5-day exploration of Tokyo and Kyoto, focusing on futuristic districts, sushi tasting, and traditional shrines." }
+                ].map((s, idx) => (
+                  <button 
+                    key={idx}
+                    type="button"
+                    onClick={() => setAiPrompt(s.prompt)}
+                    className="text-[11px] font-bold text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100 hover:text-indigo-800 px-3.5 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 cursor-pointer border border-indigo-100/30 shrink-0"
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+
               <textarea 
                 rows="3" 
                 value={aiPrompt} 
                 onChange={e => setAiPrompt(e.target.value)}
-                placeholder="e.g. A 5-day romantic trip to Bali under ₹80,000. Include luxury stays and a sunset cruise."
-                className="w-full bg-transparent text-lg font-medium text-slate-800 focus:outline-none placeholder-slate-400 resize-none" 
+                placeholder="e.g. Describe your dream vacation here, click quick-start above, or use custom tags below..."
+                className="w-full bg-transparent text-lg font-bold text-slate-800 focus:outline-none placeholder-slate-400/80 resize-none min-h-[90px]" 
               />
-              <div className="flex flex-wrap gap-2 mt-4">
-                <button type="button" onClick={() => setAiPrompt("A 3-day family trip to Paris under €1500.")} className="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 border border-purple-100/50 cursor-pointer">+ Add Dates</button>
-                <button type="button" onClick={() => setAiPrompt(prev => prev + " Limit the budget.")} className="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 border border-purple-100/50 cursor-pointer">+ Add Budget</button>
-                <button type="button" onClick={() => setAiPrompt(prev => prev + " Recommend sightseeing.")} className="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 border border-purple-100/50 cursor-pointer">+ Interests</button>
+              
+              {/* Dynamic Parameters Drawer - Fully Interactive & User Friendly! */}
+              <div className="mt-4 pt-4 border-t border-slate-100/85 flex flex-wrap gap-3 items-center justify-between">
+                
+                {/* Selector Toggles */}
+                <div className="flex flex-wrap gap-2">
+                  <button 
+                    type="button" 
+                    onClick={() => setShowDaysInput(!showDaysInput)} 
+                    className={`px-4 py-2 rounded-2xl text-xs font-black transition-all duration-250 cursor-pointer border ${
+                      showDaysInput 
+                        ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-500/20' 
+                        : 'bg-purple-50/70 hover:bg-purple-100/80 text-purple-700 border-purple-100/50'
+                    }`}
+                  >
+                    {showDaysInput ? `📅 ${aiDays} Days` : '+ Add Duration'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setShowBudgetInput(!showBudgetInput)} 
+                    className={`px-4 py-2 rounded-2xl text-xs font-black transition-all duration-250 cursor-pointer border ${
+                      showBudgetInput 
+                        ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-500/20' 
+                        : 'bg-purple-50/70 hover:bg-purple-100/80 text-purple-700 border-purple-100/50'
+                    }`}
+                  >
+                    {showBudgetInput ? `💰 ₹${aiBudget}` : '+ Add Budget'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setShowInterestsInput(!showInterestsInput)} 
+                    className={`px-4 py-2 rounded-2xl text-xs font-black transition-all duration-250 cursor-pointer border ${
+                      showInterestsInput 
+                        ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-500/20' 
+                        : 'bg-purple-50/70 hover:bg-purple-100/80 text-purple-700 border-purple-100/50'
+                    }`}
+                  >
+                    {showInterestsInput ? `✨ ${selectedInterests.length ? `${selectedInterests.length} Selected` : 'Interests'}` : '+ Interests'}
+                  </button>
+                </div>
+
+                {/* Reset button to clear prompt */}
+                {(aiPrompt || showDaysInput || showBudgetInput || showInterestsInput) && (
+                  <button 
+                    type="button" 
+                    onClick={() => { setAiPrompt(''); setShowDaysInput(false); setShowBudgetInput(false); setShowInterestsInput(false); setSelectedInterests([]); }}
+                    className="text-xs font-bold text-slate-400 hover:text-rose-500 px-3 py-1 rounded-xl transition-colors cursor-pointer"
+                  >
+                    Clear All
+                  </button>
+                )}
               </div>
+
+              {/* Dynamic Interactive Drawers */}
+              {(showDaysInput || showBudgetInput || showInterestsInput) && (
+                <div className="mt-4 p-4 rounded-2xl bg-slate-50/70 border border-slate-100/80 flex flex-col gap-4 animate-fade-in relative z-10">
+                  {/* Days Selector Drawer */}
+                  {showDaysInput && (
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-slate-500 shrink-0">Duration:</span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['3', '5', '7', '10', '14'].map(d => (
+                          <button 
+                            key={d}
+                            type="button"
+                            onClick={() => setAiDays(d)}
+                            className={`px-3 py-1 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                              aiDays === d 
+                                ? 'bg-indigo-600 text-white' 
+                                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/50'
+                            }`}
+                          >
+                            {d} Days
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Budget Selector Drawer */}
+                  {showBudgetInput && (
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-slate-500 shrink-0">Max Budget:</span>
+                      <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200/50 max-w-[200px]">
+                        <span className="text-slate-500 font-extrabold text-sm">₹</span>
+                        <input 
+                          type="text" 
+                          value={aiBudget} 
+                          onChange={e => setAiBudget(e.target.value)}
+                          placeholder="e.g. 80,000" 
+                          className="w-full text-xs font-extrabold text-slate-800 outline-none"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Interests Checklist Drawer */}
+                  {showInterestsInput && (
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs font-bold text-slate-500">Pick Interests:</span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[
+                          { emoji: "🏖️", label: "Beaches" },
+                          { emoji: "🏛️", label: "Culture & History" },
+                          { emoji: "⛰️", label: "Adventure" },
+                          { emoji: "🍜", label: "Local Food" },
+                          { emoji: "🛍️", label: "Shopping" },
+                          { emoji: "🧖‍♀️", label: "Wellness & Spa" },
+                          { emoji: "🌃", label: "Nightlife" }
+                        ].map(interest => {
+                          const isSelected = selectedInterests.includes(interest.label);
+                          return (
+                            <button
+                              key={interest.label}
+                              type="button"
+                              onClick={() => {
+                                if (isSelected) {
+                                  setSelectedInterests(selectedInterests.filter(i => i !== interest.label));
+                                } else {
+                                  setSelectedInterests([...selectedInterests, interest.label]);
+                                }
+                              }}
+                              className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all cursor-pointer border ${
+                                isSelected 
+                                  ? 'bg-purple-600 text-white border-purple-600 shadow-sm' 
+                                  : 'bg-white text-slate-600 hover:bg-slate-100 border-slate-200/50'
+                              }`}
+                            >
+                              <span>{interest.emoji}</span>
+                              <span>{interest.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </>
         )}
