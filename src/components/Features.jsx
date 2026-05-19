@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Shield, Map, Wallet, Ticket, HeartHandshake, Star, BookOpen, Crown } from 'lucide-react';
+import DigiLockerModal from './DigiLockerModal';
+import GoogleMapsModal from './GoogleMapsModal';
+import PayoneerWalletModal from './PayoneerWalletModal';
 
 const Features = () => {
+  const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(false);
+  const [isMapsOpen, setIsMapsOpen] = useState(false);
+  const [isPayoneerOpen, setIsPayoneerOpen] = useState(false);
+
   const categories = [
     {
       title: "Smart Travel Tools",
       description: "Everything you need on the go, in one app.",
       items: [
-        { icon: Shield, name: "Document Vault", desc: "Store passport, visa, tickets in one secure place" },
-        { icon: Map, name: "Offline Maps", desc: "Download city maps for no-wifi navigation" },
-        { icon: Wallet, name: "Multi-currency Wallet", desc: "Pay in local currency, track spend abroad" }
+        { id: 'digilocker', icon: Shield, name: "Document Vault", desc: "Store passport, visa, tickets securely via DigiLocker" },
+        { id: 'maps', icon: Map, name: "Offline Maps", desc: "Explore local spots and download Google Maps offline" },
+        { id: 'payoneer', icon: Wallet, name: "Multi-currency Wallet", desc: "Pay locally and convert balances powered by Payoneer" }
       ]
     },
     {
@@ -41,6 +48,12 @@ const Features = () => {
     }
   ];
 
+  const handleCardClick = (id) => {
+    if (id === 'digilocker') setIsDigiLockerOpen(true);
+    if (id === 'maps') setIsMapsOpen(true);
+    if (id === 'payoneer') setIsPayoneerOpen(true);
+  };
+
   return (
     <div id="features" className="py-24 bg-transparent relative overflow-hidden transition-all duration-500">
       {/* Decorative glass elements */}
@@ -69,11 +82,20 @@ const Features = () => {
                 {category.items.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="bg-white/40 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-slate-800/80 rounded-[2rem] p-6 hover-float cursor-pointer hover:bg-white/60 dark:hover:bg-slate-900/50 shadow-sm transition-all duration-300">
+                    <div 
+                      key={i} 
+                      onClick={() => handleCardClick(item.id)}
+                      className={`bg-white/40 dark:bg-slate-900/35 backdrop-blur-xl border border-white/50 dark:border-slate-800/80 rounded-[2rem] p-6 hover-float cursor-pointer hover:bg-white/60 dark:hover:bg-slate-900/50 shadow-sm transition-all duration-300 ${
+                        item.id ? 'hover:scale-[1.03] hover:shadow-lg hover:shadow-blue-500/5' : ''
+                      }`}
+                    >
                       <div className="w-12 h-12 bg-white/70 dark:bg-slate-800/60 rounded-2xl flex items-center justify-center mb-4 shadow-sm text-slate-700 dark:text-slate-200">
                         <Icon size={24} />
                       </div>
-                      <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{item.name}</h4>
+                      <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                        {item.name}
+                        {item.id && <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping" />}
+                      </h4>
                       <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">{item.desc}</p>
                     </div>
                   );
@@ -83,6 +105,11 @@ const Features = () => {
           ))}
         </div>
       </div>
+
+      {/* Integration Modals */}
+      <DigiLockerModal isOpen={isDigiLockerOpen} onClose={() => setIsDigiLockerOpen(false)} />
+      <GoogleMapsModal isOpen={isMapsOpen} onClose={() => setIsMapsOpen(false)} />
+      <PayoneerWalletModal isOpen={isPayoneerOpen} onClose={() => setIsPayoneerOpen(false)} />
     </div>
   );
 };
